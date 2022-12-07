@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LearnElaticsearchApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LearnElaticsearchApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(LearnElaticsearchApplication.class, args);
+    }
 
 }
