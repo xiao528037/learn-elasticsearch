@@ -2,5 +2,9 @@ server:
   port: 8001
 spring:
   elasticsearch:
-    rest:
-      uris: http://localhost:9200
+    uris:
+      - http://localhost:9200
+
+logging:
+  level:
+    root: INFO

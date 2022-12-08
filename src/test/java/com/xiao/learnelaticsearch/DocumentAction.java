@@ -1,6 +1,7 @@
 package com.xiao.learnelaticsearch;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.core.search.TotalHits;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 数据的插入、更新、修改、查询操作
@@ -50,7 +52,8 @@ public class DocumentAction {
      */
     @Test
     void insertData() throws IOException {
-        User user = new User("肖杰", "男", 30);
+        Random random = new Random();
+        User user = new User("肖杰", "男", 30, random.nextInt(1000000000));
         CreateResponse response =
                 client.create(e -> e.index("user").id("22222").document(user));
         log.info("__________________________________________________________________");
@@ -64,7 +67,8 @@ public class DocumentAction {
      */
     @Test
     void updateData() throws IOException {
-        User user = new User("大牛子", "女", 22);
+        Random random = new Random();
+        User user = new User("大牛子", "女", 22, random.nextInt(100000000));
         UpdateResponse<User> response = client.update(e -> e.index("user").id("22222").doc(user), User.class);
         log.info("__________________________________________________________________");
         log.info("{} \n {}", response.result(), response.get());
@@ -156,6 +160,23 @@ public class DocumentAction {
         BulkResponse response = client.bulk(bulkRequest.build());
         log.info(response.took() + "");
         log.info(response.items().toString());
+    }
+
+    /**
+     * 删除name=肖杰的数据
+     */
+
+    @Test
+    void deleteByAge() throws IOException {
+        DeleteByQueryResponse response = client.deleteByQuery(d -> d
+                .index("user")
+                .query(q -> q
+                        .match(t -> t
+                                .field("name")
+                                .query("肖杰")
+                        )));
+
+        log.info(">>> DocumentAction <<< {} {}", response.total(), response.deleted());
     }
 
     /**
